@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTypingSound } from "@/hooks/useTypingSound";
 
 interface TerminalInputProps {
   onSubmit: (username: string) => void;
@@ -9,11 +10,19 @@ const TerminalInput = ({ onSubmit, isLoading = false }: TerminalInputProps) => {
   const [value, setValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { playTypingSound, playEnterSound } = useTypingSound();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (value.trim()) {
+      playEnterSound();
       onSubmit(value.trim());
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== "Enter" && e.key !== "Shift" && e.key !== "Control" && e.key !== "Alt" && e.key !== "Meta") {
+      playTypingSound();
     }
   };
 
@@ -67,6 +76,7 @@ const TerminalInput = ({ onSubmit, isLoading = false }: TerminalInputProps) => {
                       type="text"
                       value={value}
                       onChange={(e) => setValue(e.target.value)}
+                      onKeyDown={handleKeyDown}
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
                       className="w-full bg-transparent text-foreground text-glow text-xl font-pixel outline-none caret-transparent"
