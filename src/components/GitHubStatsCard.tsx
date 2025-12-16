@@ -1,5 +1,4 @@
 import "@fontsource/vt323";
-import avatarImage from "@/assets/avatar.png";
 
 interface StatRowProps {
   label: string;
@@ -7,7 +6,16 @@ interface StatRowProps {
 }
 
 interface GitHubStatsCardProps {
-  username?: string;
+  username: string;
+  avatarUrl?: string;
+  stats?: {
+    totalStars: number;
+    totalCommits: number;
+    totalPRs: number;
+    totalIssues: number;
+    contributedTo: number;
+    rank: string;
+  };
   onBack?: () => void;
 }
 
@@ -18,13 +26,25 @@ const StatRow = ({ label, value }: StatRowProps) => (
   </div>
 );
 
-const GitHubStatsCard = ({ username = "Luci", onBack }: GitHubStatsCardProps) => {
-  const stats = [
-    { label: "Total Stars Earned:", value: 616 },
-    { label: "Total Commits(2025):", value: 36 },
-    { label: "Total PRs:", value: 149 },
-    { label: "Total Issues:", value: 12 },
-    { label: "Contributed to (last year):", value: 5 },
+const GitHubStatsCard = ({ username, avatarUrl, stats, onBack }: GitHubStatsCardProps) => {
+  const defaultStats = {
+    totalStars: 0,
+    totalCommits: 0,
+    totalPRs: 0,
+    totalIssues: 0,
+    contributedTo: 0,
+    rank: "C"
+  };
+
+  const displayStats = stats || defaultStats;
+  const currentYear = new Date().getFullYear();
+
+  const statRows = [
+    { label: "Total Stars Earned:", value: displayStats.totalStars },
+    { label: `Total Commits(${currentYear}):`, value: displayStats.totalCommits },
+    { label: "Total PRs:", value: displayStats.totalPRs },
+    { label: "Total Issues:", value: displayStats.totalIssues },
+    { label: "Contributed to (last year):", value: displayStats.contributedTo },
   ];
 
   return (
@@ -57,7 +77,7 @@ const GitHubStatsCard = ({ username = "Luci", onBack }: GitHubStatsCardProps) =>
               <div className="flex gap-6 md:gap-8">
                 {/* Stats section */}
                 <div className="flex-1 space-y-2 font-pixel">
-                  {stats.map((stat) => (
+                  {statRows.map((stat) => (
                     <StatRow key={stat.label} label={stat.label} value={stat.value} />
                   ))}
 
@@ -67,7 +87,7 @@ const GitHubStatsCard = ({ username = "Luci", onBack }: GitHubStatsCardProps) =>
                   {/* Rank */}
                   <div className="flex justify-between items-center text-xl md:text-2xl">
                     <span className="text-foreground text-glow">Rank:</span>
-                    <span className="text-accent text-glow font-bold">A-</span>
+                    <span className="text-accent text-glow font-bold">{displayStats.rank}</span>
                   </div>
                 </div>
 
@@ -75,10 +95,12 @@ const GitHubStatsCard = ({ username = "Luci", onBack }: GitHubStatsCardProps) =>
                 <div className="flex items-center justify-center">
                   <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-primary box-glow">
                     <img
-                      src={avatarImage}
+                      src={avatarUrl || `https://github.com/${username}.png`}
                       alt={`${username}'s Avatar`}
                       className="w-full h-full object-cover"
-                      style={{ imageRendering: "pixelated" }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${username}&background=0d1117&color=00ffff&size=128`;
+                      }}
                     />
                   </div>
                 </div>

@@ -1,29 +1,37 @@
 import "@fontsource/vt323";
 import { useState, useCallback } from "react";
+import { toast } from "sonner";
 import GitHubStatsCard from "@/components/GitHubStatsCard";
 import TerminalInput from "@/components/TerminalInput";
 import BootSequence from "@/components/BootSequence";
+import { fetchGitHubStats, GitHubStats } from "@/services/githubService";
 
 const Index = () => {
   const [booted, setBooted] = useState(false);
-  const [username, setUsername] = useState<string | null>(null);
+  const [stats, setStats] = useState<GitHubStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleBootComplete = useCallback(() => {
     setBooted(true);
   }, []);
 
-  const handleSubmit = (name: string) => {
+  const handleSubmit = async (username: string) => {
     setIsLoading(true);
-    // Simulate loading
-    setTimeout(() => {
-      setUsername(name);
+    try {
+      const data = await fetchGitHubStats(username);
+      setStats(data);
+      toast.success(`Loaded stats for ${data.username}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch stats';
+      toast.error(message);
+      console.error('Error:', error);
+    } finally {
       setIsLoading(false);
-    }, 800);
+    }
   };
 
   const handleBack = () => {
-    setUsername(null);
+    setStats(null);
   };
 
   if (!booted) {
@@ -44,8 +52,20 @@ const Index = () => {
       />
 
       <div className="w-full max-w-2xl relative z-0">
-        {username ? (
-          <GitHubStatsCard username={username} onBack={handleBack} />
+        {stats ? (
+          <GitHubStatsCard 
+            username={stats.username} 
+            avatarUrl={stats.avatarUrl}
+            stats={{
+              totalStars: stats.totalStars,
+              totalCommits: stats.totalCommits,
+              totalPRs: stats.totalPRs,
+              totalIssues: stats.totalIssues,
+              contributedTo: stats.contributedTo,
+              rank: stats.rank
+            }}
+            onBack={handleBack} 
+          />
         ) : (
           <TerminalInput onSubmit={handleSubmit} isLoading={isLoading} />
         )}
