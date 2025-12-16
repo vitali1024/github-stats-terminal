@@ -6,6 +6,11 @@ interface StatRowProps {
   value: string | number;
 }
 
+interface GitHubStatsCardProps {
+  username?: string;
+  onBack?: () => void;
+}
+
 const StatRow = ({ label, value }: StatRowProps) => (
   <div className="flex justify-between items-center text-xl md:text-2xl">
     <span className="text-foreground text-glow">{label}</span>
@@ -13,7 +18,7 @@ const StatRow = ({ label, value }: StatRowProps) => (
   </div>
 );
 
-const GitHubStatsCard = () => {
+const GitHubStatsCard = ({ username = "Luci", onBack }: GitHubStatsCardProps) => {
   const stats = [
     { label: "Total Stars Earned:", value: 616 },
     { label: "Total Commits(2025):", value: 36 },
@@ -35,10 +40,18 @@ const GitHubStatsCard = () => {
             {/* CRT flicker effect */}
             <div className="crt-flicker">
               {/* Title */}
-              <div className="mb-4 border-b border-dashed border-primary pb-2">
+              <div className="mb-4 border-b border-dashed border-primary pb-2 flex items-center justify-between">
                 <h2 className="text-2xl md:text-3xl text-foreground text-glow font-pixel">
-                  Luci's GitHub Stats
+                  {username}'s GitHub Stats
                 </h2>
+                {onBack && (
+                  <button 
+                    onClick={onBack}
+                    className="text-secondary text-glow text-lg font-pixel hover:text-accent transition-colors"
+                  >
+                    [BACK]
+                  </button>
+                )}
               </div>
 
               <div className="flex gap-6 md:gap-8">
@@ -63,7 +76,7 @@ const GitHubStatsCard = () => {
                   <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-primary box-glow">
                     <img
                       src={avatarImage}
-                      alt="Luci's Avatar"
+                      alt={`${username}'s Avatar`}
                       className="w-full h-full object-cover"
                       style={{ imageRendering: "pixelated" }}
                     />
