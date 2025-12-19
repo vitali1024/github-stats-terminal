@@ -6,38 +6,27 @@
   :root {
     --background: 0 0% 0%;
     --foreground: 180 100% 50%;
-
     --card: 0 0% 2%;
     --card-foreground: 180 100% 50%;
-
     --popover: 0 0% 2%;
     --popover-foreground: 180 100% 50%;
-
     --primary: 180 100% 50%;
     --primary-foreground: 0 0% 0%;
-
     --secondary: 300 100% 50%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 180 20% 15%;
     --muted-foreground: 180 40% 60%;
-
     --accent: 60 100% 50%;
     --accent-foreground: 0 0% 0%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 180 100% 40%;
     --input: 180 100% 40%;
     --ring: 180 100% 50%;
-
     --radius: 0.25rem;
-
     --glow-cyan: 0 0 10px hsl(180 100% 50% / 0.8), 0 0 20px hsl(180 100% 50% / 0.4), 0 0 30px hsl(180 100% 50% / 0.2);
     --glow-magenta: 0 0 10px hsl(300 100% 50% / 0.8), 0 0 20px hsl(300 100% 50% / 0.4);
     --glow-yellow: 0 0 10px hsl(60 100% 50% / 0.8), 0 0 20px hsl(60 100% 50% / 0.4);
-
     --sidebar-background: 0 0% 2%;
     --sidebar-foreground: 180 100% 50%;
     --sidebar-primary: 180 100% 50%;
@@ -84,29 +73,46 @@
     @apply border-border;
   }
 
+  html,
   body {
     @apply bg-background text-foreground;
     font-family: 'VT323', monospace;
+    overflow-x: hidden;
+  }
+
+  body.boot-active {
+    overflow: hidden;
+    height: 100vh;
   }
 }
 
 @layer utilities {
   .text-glow {
-    text-shadow: var(--glow-cyan);
+    text-shadow:
+      0 0 2px hsl(180 100% 50% / 1),
+      0 0 8px hsl(180 100% 50% / 0.6),
+      0 0 16px hsl(180 100% 50% / 0.3);
+  }
+
+  .text-glow-subtle {
+    text-shadow:
+      0 0 1px hsl(180 100% 50% / 0.8),
+      0 0 4px hsl(180 100% 50% / 0.4);
   }
 
   .box-glow {
-    box-shadow: var(--glow-cyan);
+    box-shadow:
+      0 0 4px hsl(180 100% 50% / 0.6),
+      0 0 12px hsl(180 100% 50% / 0.4),
+      inset 0 0 2px hsl(180 100% 50% / 0.2);
   }
 
   .scanlines {
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.3) 2px,
-      rgba(0, 0, 0, 0.3) 4px
-    );
+    background: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.3) 2px,
+        rgba(0, 0, 0, 0.3) 4px);
   }
 
   .crt-flicker {
@@ -119,24 +125,38 @@
   }
 
   @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+
+    0%,
+    50% {
+      opacity: 1;
+    }
+
+    51%,
+    100% {
+      opacity: 0;
+    }
   }
 
   @keyframes flicker {
-    0% { opacity: 0.97; }
-    50% { opacity: 1; }
-    100% { opacity: 0.98; }
+    0% {
+      opacity: 0.97;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0.98;
+    }
   }
 
   .rainbow-border {
-    background: linear-gradient(
-      90deg,
-      hsl(180 100% 50%) 0%,
-      hsl(280 100% 50%) 25%,
-      hsl(60 100% 50%) 50%,
-      hsl(120 100% 50%) 75%,
-      hsl(180 100% 50%) 100%
-    );
+    background: linear-gradient(90deg,
+        hsl(180 100% 50%) 0%,
+        hsl(280 100% 50%) 25%,
+        hsl(60 100% 50%) 50%,
+        hsl(120 100% 50%) 75%,
+        hsl(180 100% 50%) 100%);
   }
 }
