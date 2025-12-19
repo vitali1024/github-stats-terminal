@@ -1,6 +1,6 @@
 # GitHub Stats Terminal
 
-Retro terminal-style GitHub statistics viewer with CRT effects and mechanical keyboard sounds.
+Retro terminal-style GitHub statistics viewer.
 
 ## ✨ Features
 
@@ -47,5 +47,3 @@ npm run dev
 ```
 
 ---
-
-Built with 💚 and retro vibes
