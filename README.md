@@ -45,5 +45,3 @@ cd github-stats-terminal
 npm install
 npm run dev
 ```
-
----
