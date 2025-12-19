@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import path from "path";
 
 export default defineConfig({
+  base: "/github-stats-terminal/",
   server: {
     host: "::",
     port: 8080,
